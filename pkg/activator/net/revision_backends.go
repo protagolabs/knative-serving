@@ -22,6 +22,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -95,9 +96,9 @@ var (
     probeTimeout = func() time.Duration {
         val := os.Getenv("PROBE_TIMEOUT_MS")
         if ms, err := strconv.Atoi(val); err == nil && ms > 0 {
-            return ms * time.Millisecond
+            return time.Duration(ms) * time.Millisecond
         }
-        return defaultProbeTimeout * time.Millisecond
+        return time.Duration(defaultProbeTimeout) * time.Millisecond
     }()
 )
 
