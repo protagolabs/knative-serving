@@ -88,7 +88,7 @@ func (d dests) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 }
 
 const (
-    defaultProbeTimeout = 300
+    defaultProbeTimeout   time.Duration = 300 * time.Millisecond
 	defaultProbeFrequency time.Duration = 200 * time.Millisecond
 )
 
@@ -98,7 +98,7 @@ var (
         if ms, err := strconv.Atoi(val); err == nil && ms > 0 {
             return time.Duration(ms) * time.Millisecond
         }
-        return time.Duration(defaultProbeTimeout) * time.Millisecond
+        return defaultProbeTimeout
     }()
 )
 
