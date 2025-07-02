@@ -87,9 +87,20 @@ func (d dests) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 }
 
 const (
-	probeTimeout          time.Duration = 300 * time.Millisecond
+    defaultProbeTimeout = 300
 	defaultProbeFrequency time.Duration = 200 * time.Millisecond
 )
+
+var (
+    probeTimeout = func() time.Duration {
+        val := os.Getenv("PROBE_TIMEOUT_MS")
+        if ms, err := strconv.Atoi(val); err == nil && ms > 0 {
+            return ms * time.Millisecond
+        }
+        return defaultProbeTimeout * time.Millisecond
+    }()
+)
+
 
 // revisionWatcher watches the podIPs and ClusterIP of the service for a revision. It implements the logic
 // to supply revisionDestsUpdate events on updateCh
